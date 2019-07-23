@@ -2,33 +2,59 @@
 
 const Task = use('App/Models/Task')
 class TaskController {
-  async index ({ request, response, view }) {
+  async index ({ params, request, response, view }) {
     const tasks = await Task.query()
-      .with('user', 'file', 'project')
+      .where('project_id', params.projects_id)
+      .with('user')
       .fetch()
 
     return tasks
   }
 
-  async store ({ request, response, auth }) {
+  async store ({ params, request, response, auth }) {
     const data = await request.only([
       'project_id',
       'file_id',
       'title',
       'description',
-      'due_date'
+      'due_date',
+      'user_id'
     ])
 
-    const task = await Task.create({ ...data, user_id: auth.user.id })
+    const task = await Task.create({ ...data, project_id: params.projects_id })
 
     return task
   }
 
-  async show ({ params, request, response, view }) {}
+  async show ({ params, request, response, view }) {
+    const task = Task.findOrFail(params.id)
 
-  async update ({ params, request, response }) {}
+    return task
+  }
 
-  async destroy ({ params, request, response }) {}
+  async update ({ params, request, response }) {
+    const task = Task.findOrFail(params.id)
+
+    const data = await request.only([
+      'project_id',
+      'file_id',
+      'title',
+      'description',
+      'due_date',
+      'user_id'
+    ])
+
+    task.merge(data)
+
+    await task.save()
+    return task
+  }
+
+  async destroy ({ params, request, response }) {
+    const task = Task.findOrFail(params.id)
+
+    await task.delete()
+  }
 }
 
 module.exports = TaskController

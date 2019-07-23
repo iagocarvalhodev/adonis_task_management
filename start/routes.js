@@ -3,7 +3,7 @@
 const Route = use('Route')
 
 // Rotas Usuarios
-Route.post('users', 'UserController.store')
+Route.post('users', 'UserController.store').validator('User')
 
 // Autenticação
 Route.post('session', 'SessionController.store')
@@ -21,5 +21,5 @@ Route.group(() => {
   // projetos
   Route.resource('projects', 'ProjectController').apiOnly()
   // Tarefas
-  Route.resource('tasks', 'TaskController').apiOnly()
+  Route.resource('projects.tasks', 'TaskController').apiOnly()
 }).middleware(['auth'])
