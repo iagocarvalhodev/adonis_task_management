@@ -6,7 +6,7 @@ class ProjectController {
   async index () {
     const projects = await Project.query()
       .with('user')
-      .fetch()
+      .paginate(1, 10)
     return projects
   }
 

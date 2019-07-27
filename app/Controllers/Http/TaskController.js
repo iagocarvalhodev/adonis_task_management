@@ -6,7 +6,7 @@ class TaskController {
     const tasks = await Task.query()
       .where('project_id', params.projects_id)
       .with('user')
-      .fetch()
+      .paginate(1, 10)
 
     return tasks
   }
