@@ -6,10 +6,14 @@ const Route = use('Route')
 Route.post('users', 'UserController.store').validator('User')
 
 // Autenticação
-Route.post('session', 'SessionController.store')
+Route.post('session', 'SessionController.store').validator('Session')
 // recuperação de senha
-Route.post('passwords', 'ForgotPasswordController.store')
-Route.put('passwords', 'ForgotPasswordController.update')
+Route.post('passwords', 'ForgotPasswordController.store').validator(
+  'ForgotPassword'
+)
+Route.put('passwords', 'ForgotPasswordController.update').validator(
+  'ResetPassword'
+)
 
 // upload de arquivo e visualização
 Route.get('files/:id', 'FileController.show')
@@ -19,7 +23,11 @@ Route.group(() => {
   // arquivos
   Route.post('/files', 'FileController.store')
   // projetos
-  Route.resource('projects', 'ProjectController').apiOnly()
+  Route.resource('projects', 'ProjectController')
+    .apiOnly()
+    .validator(new Map([[['projects.store'], ['Project']]]))
   // Tarefas
-  Route.resource('projects.tasks', 'TaskController').apiOnly()
+  Route.resource('projects.tasks', 'TaskController')
+    .apiOnly()
+    .validator(new Map([[['tasks.store'], ['Task']]]))
 }).middleware(['auth'])
