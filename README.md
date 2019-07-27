@@ -7,6 +7,9 @@ This is the boilerplate for creating an API server in AdonisJs, it comes pre-con
 3. CORS
 4. Lucid ORM
 5. Migrations and seeds
+6. Jobs/File - Redis
+7. Hooks
+8. Services Exception
 
 ## Setup
 
